@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIZ TRELLO — Teste seus conhecimentos sobre o Trello!</title>
+  <style>
+/* ==========================================================================
+   QUIZ TRELLO - Folha de Estilos (style.css)
+   Identidade visual inspirada no Trello / Atlassian Design System
+   ========================================================================== */
+
+:root {
+  /* Paleta de Cores Oficial Inspirada no Trello */
+  --trello-blue: #0052CC;
+  --trello-blue-hover: #0065FF;
+  --trello-blue-light: #DEEBFF;
+  --trello-ice: #F0F6FF;
+  --trello-navy: #091E42;
+  --trello-cyan: #00B8D9;
+  --trello-teal-soft: #E6FCFF;
+
+  /* Cores de Feedback Semântico */
+  --success-green: #1F845A;
+  --success-bg: #DCFCE7;
+  --success-border: #22C55E;
+  --danger-red: #C9372C;
+  --danger-bg: #FEE2E2;
+  --danger-border: #EF4444;
+  --warning-amber: #D97706;
+  --warning-bg: #FEF3C7;
+
+  /* Neutros e Superfícies */
+  --bg-page: #F4F5F7;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F8FAFC;
+  --text-primary: #172B4D;
+  --text-secondary: #44546F;
+  --text-muted: #626F86;
+  --border-color: #DFE1E6;
+  --border-focus: #388BFF;
+
+  /* Espaçamentos, Bordas e Sombras */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 3px rgba(9, 30, 66, 0.08), 0 1px 2px rgba(9, 30, 66, 0.06);
+  --shadow-md: 0 8px 24px rgba(9, 30, 66, 0.10), 0 2px 6px rgba(9, 30, 66, 0.06);
+  --shadow-lg: 0 16px 36px rgba(9, 30, 66, 0.14), 0 4px 12px rgba(9, 30, 66, 0.08);
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Tipografia */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Reset Básico */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: linear-gradient(145deg, #091E42 0%, #0052CC 52%, #0079BF 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   CABEÇALHO SUPERIOR (TOPBAR)
+   ========================================================================== */
+.topbar {
+  background: rgba(9, 30, 66, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  padding: 0.75rem 1.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0065FF, #00B8D9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 184, 217, 0.35);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Pílulas de Status e Cronômetro no Cabeçalho */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.status-pill.hidden {
+  display: none !important;
+}
+
+.btn-topbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 0.38rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-topbar:hover {
+  background: rgba(255, 255, 255, 0.24);
+  transform: translateY(-1px);
+}
+
+.btn-topbar.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CONTAINER PRINCIPAL E TRANSIÇÕES DE TELA
+   ========================================================================== */
+.main-container {
+  flex: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 1.5rem auto 2.5rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.screen {
+  display: none;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  animation: screenFadeIn var(--transition-smooth) forwards;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes screenFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes questionSlide {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.question-animate {
+  animation: questionSlide 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ==========================================================================
+   MENSAGENS DE FEEDBACK (TOAST / BANNER)
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 360px;
+}
+
+.toast-msg {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--trello-navy);
+  color: #FFFFFF;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  border-left: 4px solid var(--trello-cyan);
+  animation: screenFadeIn 0.22s ease-out forwards;
+}
+
+.toast-msg.toast-warning {
+  background: #7C2D12;
+  border-left-color: #F59E0B;
+}
+
+.toast-msg.toast-success {
+  background: #064E3B;
+  border-left-color: #22C55E;
+}
+
+/* ==========================================================================
+   1. TELA INICIAL (HOME SCREEN)
+   ========================================================================== */
+.home-hero {
+  background: linear-gradient(135deg, #0052CC 0%, #0747A6 60%, #091E42 100%);
+  color: #FFFFFF;
+  padding: 2.25rem 2rem 1.85rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.badge-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 184, 217, 0.22);
+  border: 1px solid rgba(0, 184, 217, 0.55);
+  color: #B3F5FF;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.75rem;
+}
+
+.home-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+
+.home-subtitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #B3D4FF;
+  margin-bottom: 0.75rem;
+}
+
+.home-description {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.55;
+}
+
+/* Ilustração Visual de Quadro Trello na Tela Inicial */
+.kanban-illustration {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: var(--radius-md);
+  padding: 0.9rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 24px rgba(9, 30, 66, 0.28);
+}
+
+.kanban-ill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #DEEBFF;
+}
+
+.kanban-ill-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.kanban-ill-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.kanban-ill-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.kanban-ill-col {
+  background: rgba(244, 245, 247, 0.95);
+  border-radius: 6px;
+  padding: 0.45rem;
+  color: var(--text-primary);
+}
+
+.kanban-ill-col-title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.kanban-ill-card {
+  background: #FFFFFF;
+  border-radius: 4px;
+  padding: 0.35rem;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.12);
+}
+
+.kanban-ill-card:last-child {
+  margin-bottom: 0;
+}
+
+.ill-tag {
+  display: block;
+  width: 26px;
+  height: 5px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.ill-tag.blue { background: #0052CC; }
+.ill-tag.green { background: #1F845A; }
+.ill-tag.amber { background: #F59E0B; }
+.ill-tag.cyan { background: #00B8D9; }
+
+.ill-line {
+  height: 5px;
+  border-radius: 3px;
+  background: #DFE1E6;
+  width: 90%;
+}
+
+.ill-line.short {
+  width: 60%;
+  margin-top: 3px;
+}
+
+/* Corpo da Tela Inicial */
+.home-body {
+  padding: 1.85rem 2rem 2rem;
+}
+
+.info-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin-bottom: 1.6rem;
+}
+
+.info-card {
+  background: var(--trello-ice);
+  border: 1px solid var(--trello-blue-light);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.info-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--trello-blue);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info-card-text strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--trello-navy);
+}
+
+.info-card-text span {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Formulário de Início do Quiz */
+.start-form-box {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  margin-bottom: 0.45rem;
+}
+
+.input-text {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: #FFFFFF;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input-text:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(56, 139, 255, 0.2);
+}
+
+.input-text.input-error {
+  border-color: var(--danger-red);
+  box-shadow: 0 0 0 3px rgba(201, 55, 44, 0.15);
+}
+
+.timer-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--trello-blue);
+  cursor: pointer;
+}
+
+/* Recorde Salvo no LocalStorage */
+.best-score-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  color: #92400E;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+  margin-bottom: 1.25rem;
+}
+
+.best-score-banner.hidden {
+  display: none !important;
+}
+
+/* Botões Principais */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  font-weight: 700;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-primary {
+  background: var(--trello-blue);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--trello-blue-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 101, 255, 0.34);
+}
+
+.btn-secondary {
+  background: #EBECF0;
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #DFE1E6;
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background: var(--success-green);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(31, 132, 90, 0.25);
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #216E4E;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: #FFFFFF;
+  color: var(--trello-blue);
+  border: 2px solid var(--trello-blue);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--trello-ice);
+  transform: translateY(-1px);
+}
+
+.btn-block {
+  width: 100%;
+  font-size: 1.05rem;
+  padding: 0.95rem 1.5rem;
+}
+
+/* ==========================================================================
+   2. TELA DO QUIZ (QUIZ SCREEN)
+   ========================================================================== */
+.quiz-header {
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 2rem;
+}
+
+.quiz-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.question-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--trello-blue);
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.32rem 0.85rem;
+  border-radius: var(--radius-pill);
+}
+
+.answered-counter-text {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Barra de Progresso */
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background: #DFE1E6;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--trello-blue) 0%, var(--trello-cyan) 100%);
+  border-radius: var(--radius-pill);
+  transition: width 0.35s ease;
+}
+
+.quiz-body {
+  padding: 1.75rem 2rem;
+}
+
+.question-category {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--trello-blue);
+  background: var(--trello-ice);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  margin-bottom: 0.65rem;
+}
+
+.question-title {
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: var(--trello-navy);
+  line-height: 1.35;
+  margin-bottom: 1.35rem;
+}
+
+/* Lista de Alternativas (4 Opções) */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.option-btn {
+  width: 100%;
+  text-align: left;
+  background: #FFFFFF;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--trello-blue-hover);
+  background: var(--trello-ice);
+  transform: translateX(3px);
+}
+
+.option-letter {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  border: 1px solid var(--border-color);
+  color: var(--trello-navy);
+  font-weight: 800;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.option-text {
+  flex: 1;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.option-status-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 800;
+}
+
+/* Estado Selecionado (Antes de Confirmar) */
+.option-btn.selected {
+  border-color: var(--trello-blue);
+  background: var(--trello-ice);
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+}
+
+.option-btn.selected .option-letter {
+  background: var(--trello-blue);
+  border-color: var(--trello-blue);
+  color: #FFFFFF;
+}
+
+/* Estado Correto (Verde) */
+.option-btn.correct {
+  border-color: var(--success-border) !important;
+  background: var(--success-bg) !important;
+  color: #064E3B !important;
+}
+
+.option-btn.correct .option-letter {
+  background: var(--success-green) !important;
+  border-color: var(--success-green) !important;
+  color: #FFFFFF !important;
+}
+
+/* Estado Incorreto (Vermelho) */
+.option-btn.incorrect {
+  border-color: var(--danger-border) !important;
+  background: var(--danger-bg) !important;
+  color: #7F1D1D !important;
+}
+
+.option-btn.incorrect .option-letter {
+  background: var(--danger-red) !important;
+  border-color: var(--danger-red) !important;
+  color: #FFFFFF !important;
+}
+
+/* Caixa de Feedback e Explicação Educativa */
+.feedback-box {
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.25rem;
+  display: none;
+  animation: screenFadeIn 0.25s ease-out forwards;
+}
+
+.feedback-box.visible {
+  display: block;
+}
+
+.feedback-box.feedback-correct {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  border-left: 5px solid var(--success-green);
+  color: #064E3B;
+}
+
+.feedback-box.feedback-incorrect {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-left: 5px solid var(--danger-red);
+  color: #7F1D1D;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 0.98rem;
+  margin-bottom: 0.35rem;
+}
+
+.feedback-explanation {
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* Rodapé de Navegação das Perguntas */
+.quiz-footer {
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border-color);
+  padding: 1.1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.quiz-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   3. TELA DE RESULTADO (RESULT SCREEN)
+   ========================================================================== */
+.result-hero {
+  background: linear-gradient(135deg, #091E42 0%, #0052CC 100%);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 2.25rem 2rem 1.75rem;
+}
+
+.result-trophy {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+.result-rank-badge {
+  display: inline-block;
+  background: #00B8D9;
+  color: #091E42;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.32rem 0.95rem;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.65rem;
+}
+
+.result-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.result-message {
+  font-size: 1rem;
+  color: #DEEBFF;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.result-body {
+  padding: 1.85rem 2rem 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.stat-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-card.stat-highlight {
+  background: var(--trello-ice);
+  border-color: var(--trello-blue-light);
+}
+
+.stat-card.stat-correct {
+  background: #F0FDF4;
+  border-color: #BBF7D0;
+}
+
+.stat-card.stat-wrong {
+  background: #FEF2F2;
+  border-color: #FECACA;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--trello-navy);
+  line-height: 1.2;
+}
+
+.stat-card.stat-correct .stat-value { color: var(--success-green); }
+.stat-card.stat-wrong .stat-value { color: var(--danger-red); }
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+  display: block;
+}
+
+.result-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   4. SEÇÃO DE REVISÃO DAS RESPOSTAS (REVIEW SECTION)
+   ========================================================================== */
+.review-section {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border-color);
+  display: none;
+}
+
+.review-section.visible {
+  display: block;
+  animation: screenFadeIn 0.3s ease-out forwards;
+}
+
+.review-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.15rem;
+  flex-wrap: wrap;
+}
+
+.review-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--trello-navy);
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-left: 5px solid var(--trello-blue);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.review-card.review-ok {
+  border-left-color: var(--success-green);
+}
+
+.review-card.review-err {
+  border-left-color: var(--danger-red);
+}
+
+.review-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-q-num {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.review-badge {
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
+}
+
+.review-badge.badge-ok {
+  background: var(--success-bg);
+  color: var(--success-green);
+}
+
+.review-badge.badge-err {
+  background: var(--danger-bg);
+  color: var(--danger-red);
+}
+
+.review-question-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--trello-navy);
+  margin-bottom: 0.65rem;
+}
+
+.review-answers-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.65rem;
+}
+
+.review-ans-line {
+  padding: 0.45rem 0.7rem;
+  border-radius: 6px;
+}
+
+.review-ans-line.user-ok {
+  background: var(--success-bg);
+  color: #064E3B;
+}
+
+.review-ans-line.user-err {
+  background: var(--danger-bg);
+  color: #7F1D1D;
+}
+
+.review-ans-line.correct-ref {
+  background: #F0FDF4;
+  border: 1px dashed var(--success-border);
+  color: #064E3B;
+}
+
+.review-exp-text {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   MODAIS IN-PAGE (CONFIRMAÇÃO DE REINÍCIO)
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 30, 66, 0.62);
+  backdrop-filter: blur(4px);
+  z-index: 250;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-backdrop.active {
+  display: flex;
+}
+
+.modal-card {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  max-width: 440px;
+  width: 100%;
+  padding: 1.65rem;
+  box-shadow: var(--shadow-lg);
+  animation: screenFadeIn 0.2s ease-out forwards;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--trello-navy);
+  margin-bottom: 0.5rem;
+}
+
+.modal-desc {
+  font-size: 0.94rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.35rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+/* Rodapé da Página */
+.page-footer {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.82rem;
+  padding: 0 1rem 1.5rem;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (TABLETS E CELULARES)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .home-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-pills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-hero,
+  .home-body,
+  .quiz-header,
+  .quiz-body,
+  .quiz-footer,
+  .result-hero,
+  .result-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .home-title {
+    font-size: 1.75rem;
+  }
+
+  .question-title {
+    font-size: 1.15rem;
+  }
+
+  .quiz-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .quiz-footer-right {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .quiz-footer .btn {
+    width: 100%;
+  }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- CABEÇALHO SUPERIOR -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button type="button" id="btn-brand-home" class="brand-logo" title="Voltar ao início">
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="16" rx="2" fill="#FFFFFF"/>
+            <rect x="14" y="3" width="7" height="10" rx="2" fill="#FFFFFF"/>
+          </svg>
+        </span>
+        <span>QUIZ TRELLO</span>
+      </button>
+
+      <div class="topbar-actions">
+        <div id="topbar-player-pill" class="status-pill hidden">
+          <span>👤</span>
+          <span id="topbar-player-name">Participante</span>
+        </div>
+
+        <div id="topbar-timer-pill" class="status-pill hidden" title="Tempo de realização">
+          <span>⏱️</span>
+          <span id="timer-display">00:00</span>
+        </div>
+
+        <button type="button" id="btn-restart-top" class="btn-topbar hidden">
+          ↻ Reiniciar Quiz
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTAINER PRINCIPAL -->
+  <main class="main-container">
+
+    <!-- ====================================================================
+         1. TELA INICIAL (HOME SCREEN)
+         ==================================================================== -->
+    <section id="screen-home" class="screen active" aria-labelledby="home-main-title">
+      <div class="home-hero">
+        <div class="home-hero-grid">
+          <div>
+            <span class="badge-level">✓ 10 Perguntas · Nível Fácil</span>
+            <h1 id="home-main-title" class="home-title">QUIZ TRELLO</h1>
+            <p class="home-subtitle">Teste seus conhecimentos sobre o Trello!</p>
+            <p class="home-description">
+              Descubra de forma rápida e interativa se você domina os conceitos fundamentais do Trello:
+              quadros, listas, cartões, etiquetas, prazos de entrega, checklists e organização em equipe.
+            </p>
+          </div>
+
+          <!-- Ilustração Visual de um Quadro Trello (Kanban) -->
+          <div class="kanban-illustration" aria-hidden="true">
+            <div class="kanban-ill-header">
+              <span>Quadro de Projeto · Trello</span>
+              <div class="kanban-ill-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="kanban-ill-cols">
+              <div class="kanban-ill-col">
+                <div class="kanban-ill-col-title">A Fazer</div>
+                <div class="kanban-ill-card">
+                  <span class="ill-tag blue"></span>
+                  <div class="ill-line"></div>
+                  <div class="ill-line short"></div>
+                </div>
+                <div class="kanban-ill-card">
+                  <span class="ill-tag amber"></span>
+                  <div class="ill-line"></div>
+                </div>
+              </div>
+              <div class="kanban-ill-col">
+                <div class="kanban-ill-col-title">Fazendo</div>
+                <div class="kanban-ill-card">
+                  <span class="ill-tag cyan"></span>
+                  <div class="ill-line"></div>
+                  <div class="ill-line short"></div>
+                </div>
+              </div>
+              <div class="kanban-ill-col">
+                <div class="kanban-ill-col-title">Concluído</div>
+                <div class="kanban-ill-card">
+                  <span class="ill-tag green"></span>
+                  <div class="ill-line"></div>
+                </div>
+                <div class="kanban-ill-card">
+                  <span class="ill-tag green"></span>
+                  <div class="ill-line short"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-body">
+        <!-- Resumo Informativo do Quiz -->
+        <div class="info-pills-grid">
+          <div class="info-card">
+            <div class="info-card-icon" aria-hidden="true">📋</div>
+            <div class="info-card-text">
+              <strong>10 Perguntas</strong>
+              <span>Múltipla escolha (4 opções)</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon" aria-hidden="true">🎯</div>
+            <div class="info-card-text">
+              <strong>Nível Fácil</strong>
+              <span>Ideal para iniciantes</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon" aria-hidden="true">💡</div>
+            <div class="info-card-text">
+              <strong>Feedback Imediato</strong>
+              <span>Explicação em cada questão</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner de Melhor Pontuação (LocalStorage) -->
+        <div id="best-score-banner" class="best-score-banner hidden">
+          <span>🏆 <strong id="best-score-text"></strong></span>
+        </div>
+
+        <!-- Formulário de Identificação do Participante -->
+        <div class="start-form-box">
+          <div class="form-group">
+            <label for="participant-name" class="form-label">Seu nome ou apelido:</label>
+            <input
+              type="text"
+              id="participant-name"
+              class="input-text"
+              placeholder="Digite seu nome para iniciar..."
+              maxlength="50"
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="timer-toggle-row">
+            <label class="toggle-label" for="toggle-timer-checkbox">
+              <input type="checkbox" id="toggle-timer-checkbox" checked>
+              <span>Exibir cronômetro de acompanhamento (opcional)</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="button" id="btn-start-quiz" class="btn btn-primary btn-block">
+          COMEÇAR QUIZ →
+        </button>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         2. TELA DO QUIZ (QUIZ SCREEN)
+         ==================================================================== -->
+    <section id="screen-quiz" class="screen" aria-live="polite">
+      <div class="quiz-header">
+        <div class="quiz-meta-row">
+          <span id="question-number-badge" class="question-counter-badge">Pergunta 1 de 10</span>
+          <span id="answered-counter-text" class="answered-counter-text">Respondidas: 0 de 10</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+          <div id="quiz-progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="question-content-wrapper" class="quiz-body">
+        <span id="question-category" class="question-category">Conceito Básico</span>
+        <h2 id="question-title" class="question-title">Carregando pergunta...</h2>
+
+        <!-- 4 Alternativas geradas dinamicamente pelo JavaScript -->
+        <div id="options-container" class="options-list"></div>
+
+        <!-- Caixa de Feedback e Explicação Educativa -->
+        <div id="feedback-box" class="feedback-box">
+          <div id="feedback-title" class="feedback-header"></div>
+          <p id="feedback-explanation" class="feedback-explanation"></p>
+        </div>
+      </div>
+
+      <div class="quiz-footer">
+        <button type="button" id="btn-prev-question" class="btn btn-secondary">
+          ← VOLTAR
+        </button>
+
+        <div class="quiz-footer-right">
+          <button type="button" id="btn-confirm-answer" class="btn btn-success" disabled>
+            ✓ CONFIRMAR RESPOSTA
+          </button>
+          <button type="button" id="btn-next-question" class="btn btn-primary">
+            PRÓXIMA PERGUNTA →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. TELA DE RESULTADO E REVISÃO (RESULT SCREEN)
+         ==================================================================== -->
+    <section id="screen-result" class="screen" aria-labelledby="result-title">
+      <div class="result-hero">
+        <div class="result-trophy" aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+            <path d="M12 15C15.3137 15 18 12.3137 18 9V4H6V9C6 12.3137 8.68629 15 12 15Z" stroke="#FFFFFF" stroke-width="2"/>
+            <path d="M6 6H3V8C3 10.2091 4.79086 12 7 12M18 6H21V8C21 10.2091 19.2091 12 17 12" stroke="#00B8D9" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 15V19M8 20H16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <span id="result-rank-badge" class="result-rank-badge">Especialista em Trello!</span>
+        </div>
+        <h2 id="result-title" class="result-title">Resultado Final</h2>
+        <p id="result-message" class="result-message"></p>
+      </div>
+
+      <div class="result-body">
+        <div class="stats-grid">
+          <div class="stat-card stat-highlight">
+            <span id="stat-score" class="stat-value">10 de 10</span>
+            <span class="stat-label">Pontuação Final</span>
+          </div>
+          <div class="stat-card stat-highlight">
+            <span id="stat-percentage" class="stat-value">100%</span>
+            <span class="stat-label">Porcentagem de Acertos</span>
+          </div>
+          <div class="stat-card stat-correct">
+            <span id="stat-correct" class="stat-value">10</span>
+            <span class="stat-label">Respostas Corretas</span>
+          </div>
+          <div class="stat-card stat-wrong">
+            <span id="stat-wrong" class="stat-value">0</span>
+            <span class="stat-label">Respostas Incorretas</span>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button type="button" id="btn-review-answers" class="btn btn-outline">
+            REVISAR RESPOSTAS
+          </button>
+          <button type="button" id="btn-retry-quiz" class="btn btn-primary">
+            REFAZER QUIZ
+          </button>
+          <button type="button" id="btn-back-home" class="btn btn-secondary">
+            VOLTAR AO INÍCIO
+          </button>
+        </div>
+
+        <!-- Seção de Revisão Completa das 10 Perguntas -->
+        <div id="review-section" class="review-section">
+          <div class="review-header-bar">
+            <h3 class="review-title">Revisão Detalhada das 10 Perguntas</h3>
+          </div>
+          <div id="review-list" class="review-list"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE REINÍCIO -->
+  <div id="restart-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="restart-modal-title">
+    <div class="modal-card">
+      <h3 id="restart-modal-title" class="modal-title">Reiniciar o Quiz?</h3>
+      <p class="modal-desc">
+        Seu progresso atual nas perguntas será zerado e o quiz recomeçará da Pergunta 1. Deseja continuar?
+      </p>
+      <div class="modal-actions">
+        <button type="button" id="btn-cancel-restart" class="btn btn-secondary">
+          Cancelar
+        </button>
+        <button type="button" id="btn-confirm-restart" class="btn btn-primary">
+          Sim, Reiniciar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTAINER DE MENSAGENS FLUTUANTES (TOASTS) -->
+  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+
+  <footer class="page-footer">
+    Quiz Educacional sobre o Trello · Desenvolvido com HTML5, CSS3 e JavaScript Puro
+  </footer>
+
+  <script>
+/* ==========================================================================
+   QUIZ TRELLO - Lógica da Aplicação (script.js)
+   Desenvolvido em JavaScript Puro (Vanilla JS - ES6+), sem frameworks
+   ========================================================================== */
+
+/**
+ * Banco de 10 perguntas de nível fácil sobre os conceitos fundamentais do Trello.
+ * Cada pergunta possui 4 alternativas, apenas 1 correta e explicação educativa.
+ */
+const QUIZ_QUESTIONS = [
+  {
+    id: 1,
+    category: "Conceito Básico",
+    question: "O que é o Trello?",
+    options: [
+      "Um programa exclusivo para edição de fotos e vídeos",
+      "Uma ferramenta visual para organizar tarefas e projetos usando quadros, listas e cartões",
+      "Um antivírus para proteger o computador contra ameaças",
+      "Uma linguagem de programação usada para criar bancos de dados"
+    ],
+    correctIndex: 1,
+    explanation: "O Trello é uma ferramenta visual de gerenciamento de tarefas e projetos baseada no método Kanban, permitindo organizar atividades em quadros, listas e cartões."
+  },
+  {
+    id: 2,
+    category: "Estrutura Principal",
+    question: "Para que servem os Quadros (Boards) no Trello?",
+    options: [
+      "Representar o espaço principal de um projeto, onde toda a equipe visualiza e organiza as etapas do trabalho",
+      "Apenas para trocar a senha da conta do usuário",
+      "Fazer chamadas de vídeo automáticas entre os membros",
+      "Apagar todos os arquivos antigos do computador"
+    ],
+    correctIndex: 0,
+    explanation: "Um Quadro (Board) funciona como o painel ou mural principal de um projeto (por exemplo, 'Lançamento de um Site' ou 'Tarefas da Equipe')."
+  },
+  {
+    id: 3,
+    category: "Colunas de Fluxo",
+    question: "O que são as Listas (Lists) dentro de um quadro do Trello?",
+    options: [
+      "Contatos salvos na agenda do telefone celular",
+      "Colunas verticais que representam os estágios ou etapas das tarefas, como 'A Fazer', 'Em Andamento' e 'Concluído'",
+      "Senhas de segurança exigidas para abrir cada tarefa",
+      "Mensagens de erro do navegador de internet"
+    ],
+    correctIndex: 1,
+    explanation: "As Listas são as colunas do quadro que organizam o fluxo de trabalho por etapas, permitindo acompanhar em que fase cada tarefa se encontra."
+  },
+  {
+    id: 4,
+    category: "Unidades de Tarefa",
+    question: "Para que servem os Cartões (Cards) no Trello?",
+    options: [
+      "Para representar cada tarefa, ideia ou atividade individual que precisa ser realizada no projeto",
+      "Para instalar novos programas no sistema operacional",
+      "Para bloquear o acesso de outros membros ao quadro",
+      "Para alterar o idioma do teclado do computador"
+    ],
+    correctIndex: 0,
+    explanation: "Os Cartões são os blocos fundamentais do Trello: cada cartão representa uma tarefa ou atividade específica e guarda descrições, prazos, membros e anexos."
+  },
+  {
+    id: 5,
+    category: "Dinâmica de Uso",
+    question: "Como uma tarefa costuma avançar de uma etapa para outra no Trello?",
+    options: [
+      "Apagando o quadro inteiro e criando outro do zero",
+      "Reiniciando o computador sempre que terminar uma atividade",
+      "Arrastando e soltando o cartão de uma lista (coluna) para a lista seguinte conforme o progresso",
+      "Enviando uma carta impressa pelo correio para a equipe"
+    ],
+    correctIndex: 2,
+    explanation: "No Trello, basta clicar, arrastar e soltar o cartão de uma coluna para outra (por exemplo, de 'Em Andamento' para 'Concluído') para atualizar seu progresso."
+  },
+  {
+    id: 6,
+    category: "Classificação Visual",
+    question: "O que são as Etiquetas (Labels) aplicadas aos cartões do Trello?",
+    options: [
+      "Marcadores coloridos usados para categorizar tarefas ou destacar o nível de prioridade",
+      "Vídeos musicais adicionados ao fundo da tela",
+      "Bloqueadores que impedem a edição do título do cartão",
+      "Programas que calculam impostos automaticamente"
+    ],
+    correctIndex: 0,
+    explanation: "As Etiquetas coloridas facilitam a identificação visual rápida no quadro, indicando por exemplo a urgência (Alta, Média, Baixa) ou a área da tarefa."
+  },
+  {
+    id: 7,
+    category: "Controle de Tempo",
+    question: "Para que servem os Prazos de Entrega (Due Dates) em um cartão?",
+    options: [
+      "Para excluir o cartão automaticamente assim que ele é criado",
+      "Para definir a data e o horário limite da tarefa, exibindo avisos visuais quando o vencimento está próximo",
+      "Para mudar a cor de fundo do navegador",
+      "Para impedir que novos membros entrem na equipe"
+    ],
+    correctIndex: 1,
+    explanation: "Os Prazos de Entrega ajudam a equipe a cumprir o cronograma, mostrando alertas amarelos quando o prazo está próximo e vermelhos se estiver atrasado."
+  },
+  {
+    id: 8,
+    category: "Trabalho em Equipe",
+    question: "Como funciona e para que serve adicionar Membros a um cartão?",
+    options: [
+      "Atribui pessoas da equipe ao cartão para deixar visível quem é o responsável por aquela tarefa",
+      "Serve apenas para cobrar uma taxa financeira dos participantes",
+      "Apaga o histórico de atividades do projeto",
+      "Transforma o cartão em uma planilha bloqueada"
+    ],
+    correctIndex: 0,
+    explanation: "Ao adicionar membros a um cartão, a foto ou as iniciais deles aparecem na tarefa, deixando claro para toda a equipe quem está cuidando daquela atividade."
+  },
+  {
+    id: 9,
+    category: "Subtarefas e Passos",
+    question: "Qual é a função de uma Checklist dentro de um cartão do Trello?",
+    options: [
+      "Desconectar o usuário da internet após 10 minutos",
+      "Dividir uma tarefa maior em uma lista de pequenos passos que podem ser marcados conforme são concluídos",
+      "Trocar o nome do quadro principal automaticamente",
+      "Esconder o cartão para que ninguém mais consiga encontrá-lo"
+    ],
+    correctIndex: 1,
+    explanation: "O recurso de Checklist permite listar subtarefas dentro do cartão e exibe uma barra de progresso (de 0% a 100%) à medida que cada item é concluído."
+  },
+  {
+    id: 10,
+    category: "Visão Geral",
+    question: "De que maneira o Trello ajuda na organização de projetos em equipe?",
+    options: [
+      "Escrevendo todo o trabalho sozinho sem participação humana",
+      "Centralizando as tarefas em um painel visual compartilhado, facilitando a comunicação e o acompanhamento do projeto",
+      "Substituindo o navegador de internet do computador",
+      "Impedindo que mais de uma pessoa visualize o projeto ao mesmo tempo"
+    ],
+    correctIndex: 1,
+    explanation: "O Trello melhora a organização porque reúne tarefas, prazos, checklists e responsáveis em um único lugar visual e atualizado em tempo real para toda a equipe."
+  }
+];
+
+const STORAGE_KEY = "trello_quiz_best_score_v1";
+const OPTION_LETTERS = ["A", "B", "C", "D"];
+
+/**
+ * Estado global da aplicação em memória
+ */
+const state = {
+  playerName: "",
+  currentIndex: 0,
+  selectedOption: null,
+  // Array de 10 posições: null (não respondida) ou { selectedIndex: number, isCorrect: boolean }
+  answers: Array(QUIZ_QUESTIONS.length).fill(null),
+  timerEnabled: true,
+  elapsedSeconds: 0,
+  timerInterval: null
+};
+
+/* ==========================================================================
+   FUNÇÕES UTILITÁRIAS (FORMATAÇÃO, TOAST E LOCALSTORAGE)
+   ========================================================================== */
+
+/**
+ * Formata segundos totais no padrão MM:SS
+ */
+function formatTime(totalSeconds) {
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+/**
+ * Exibe uma mensagem visual flutuante (toast) na tela sem usar alert()
+ */
+function showToast(message, type = "info") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast-msg ${type === "warning" ? "toast-warning" : type === "success" ? "toast-success" : ""}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(8px)";
+    toast.style.transition = "all 0.22s ease";
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 230);
+  }, 2800);
+}
+
+/**
+ * Lê o melhor resultado salvo no localStorage com tratamento seguro (try/catch)
+ */
+function loadBestScore() {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Salva o melhor resultado no localStorage se superar a maior pontuação anterior
+ */
+function saveBestScoreIfBetter(score, percentage, elapsedSeconds, playerName) {
+  try {
+    const currentBest = loadBestScore();
+    const isBetter =
+      !currentBest ||
+      score > currentBest.score ||
+      (score === currentBest.score && elapsedSeconds < (currentBest.time || 999999));
+
+    if (isBetter) {
+      const record = {
+        name: playerName || "Participante",
+        score,
+        percentage,
+        time: elapsedSeconds,
+        date: new Date().toLocaleDateString("pt-BR")
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+      return true;
+    }
+  } catch (err) {
+    // Ignora silenciosamente caso o navegador bloqueie localStorage
+  }
+  return false;
+}
+
+/**
+ * Atualiza o banner de melhor pontuação na Tela Inicial
+ */
+function renderBestScoreBanner() {
+  const banner = document.getElementById("best-score-banner");
+  const textEl = document.getElementById("best-score-text");
+  if (!banner || !textEl) return;
+
+  const best = loadBestScore();
+  if (!best) {
+    banner.classList.add("hidden");
+    return;
+  }
+
+  banner.classList.remove("hidden");
+  const timeInfo = best.time ? ` em ${formatTime(best.time)}` : "";
+  textEl.textContent = `Melhor pontuação salva: ${best.name} — ${best.score}/10 (${best.percentage}%)${timeInfo}`;
+}
+
+/* ==========================================================================
+   CONTROLE DO CRONÔMETRO OPCIONAL
+   ========================================================================== */
+
+function startTimer() {
+  stopTimer();
+  const timerPill = document.getElementById("topbar-timer-pill");
+  const timerDisplay = document.getElementById("timer-display");
+
+  if (!state.timerEnabled) {
+    if (timerPill) timerPill.classList.add("hidden");
+    return;
+  }
+
+  if (timerPill) timerPill.classList.remove("hidden");
+  if (timerDisplay) timerDisplay.textContent = formatTime(state.elapsedSeconds);
+
+  state.timerInterval = setInterval(() => {
+    state.elapsedSeconds += 1;
+    if (timerDisplay) {
+      timerDisplay.textContent = formatTime(state.elapsedSeconds);
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+}
+
+/* ==========================================================================
+   NAVEGAÇÃO ENTRE TELAS
+   ========================================================================== */
+
+function showScreen(screenId) {
+  const screens = ["screen-home", "screen-quiz", "screen-result"];
+  screens.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      if (id === screenId) {
+        el.classList.add("active");
+      } else {
+        el.classList.remove("active");
+      }
+    }
+  });
+
+  const playerPill = document.getElementById("topbar-player-pill");
+  const restartBtn = document.getElementById("btn-restart-top");
+  const timerPill = document.getElementById("topbar-timer-pill");
+
+  if (screenId === "screen-quiz") {
+    if (playerPill) playerPill.classList.remove("hidden");
+    if (restartBtn) restartBtn.classList.remove("hidden");
+    if (timerPill) {
+      timerPill.classList.toggle("hidden", !state.timerEnabled);
+    }
+  } else if (screenId === "screen-result") {
+    if (playerPill) playerPill.classList.remove("hidden");
+    if (restartBtn) restartBtn.classList.add("hidden");
+    if (timerPill) timerPill.classList.add("hidden");
+  } else {
+    if (playerPill) playerPill.classList.add("hidden");
+    if (restartBtn) restartBtn.classList.add("hidden");
+    if (timerPill) timerPill.classList.add("hidden");
+    renderBestScoreBanner();
+  }
+}
+
+/* ==========================================================================
+   INICIALIZAÇÃO E RENDERIZAÇÃO DO QUIZ
+   ========================================================================== */
+
+function startQuiz() {
+  const nameInput = document.getElementById("participant-name");
+  const timerCheckbox = document.getElementById("toggle-timer-checkbox");
+
+  const rawName = nameInput ? nameInput.value.trim() : "";
+  if (!rawName) {
+    if (nameInput) {
+      nameInput.classList.add("input-error");
+      nameInput.focus();
+    }
+    showToast("Por favor, digite seu nome para começar o quiz!", "warning");
+    return;
+  }
+
+  if (nameInput) nameInput.classList.remove("input-error");
+
+  state.playerName = rawName;
+  state.currentIndex = 0;
+  state.selectedOption = null;
+  state.answers = Array(QUIZ_QUESTIONS.length).fill(null);
+  state.timerEnabled = timerCheckbox ? timerCheckbox.checked : true;
+  state.elapsedSeconds = 0;
+
+  const playerDisplay = document.getElementById("topbar-player-name");
+  if (playerDisplay) playerDisplay.textContent = state.playerName;
+
+  showScreen("screen-quiz");
+  startTimer();
+  renderCurrentQuestion();
+}
+
+/**
+ * Calcula quantas perguntas já foram confirmadas/respondidas
+ */
+function getAnsweredCount() {
+  return state.answers.filter((a) => a !== null).length;
+}
+
+/**
+ * Renderiza a pergunta atual, suas 4 alternativas, progresso e estado de feedback
+ */
+function renderCurrentQuestion() {
+  const q = QUIZ_QUESTIONS[state.currentIndex];
+  const answeredRecord = state.answers[state.currentIndex];
+  const total = QUIZ_QUESTIONS.length;
+  const answeredCount = getAnsweredCount();
+
+  // Atualiza contadores e barra de progresso
+  const numBadge = document.getElementById("question-number-badge");
+  const ansCounter = document.getElementById("answered-counter-text");
+  const progressFill = document.getElementById("quiz-progress-fill");
+
+  if (numBadge) numBadge.textContent = `Pergunta ${state.currentIndex + 1} de ${total}`;
+  if (ansCounter) ansCounter.textContent = `Respondidas: ${answeredCount} de ${total}`;
+  if (progressFill) {
+    const pct = Math.round((answeredCount / total) * 100);
+    progressFill.style.width = `${pct}%`;
+  }
+
+  // Animação suave de entrada da pergunta
+  const contentWrapper = document.getElementById("question-content-wrapper");
+  if (contentWrapper) {
+    contentWrapper.classList.remove("question-animate");
+    void contentWrapper.offsetWidth;
+    contentWrapper.classList.add("question-animate");
+  }
+
+  // Atualiza categoria e enunciado
+  const catEl = document.getElementById("question-category");
+  const titleEl = document.getElementById("question-title");
+  if (catEl) catEl.textContent = q.category;
+  if (titleEl) titleEl.textContent = `${state.currentIndex + 1}. ${q.question}`;
+
+  // Renderiza as 4 alternativas
+  const optionsContainer = document.getElementById("options-container");
+  if (optionsContainer) {
+    optionsContainer.innerHTML = "";
+
+    q.options.forEach((optText, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "option-btn";
+      btn.dataset.optionIndex = String(idx);
+
+      let statusSymbol = "";
+
+      if (answeredRecord !== null) {
+        // Pergunta já respondida: bloqueia cliques (impede responder duas vezes)
+        btn.disabled = true;
+        if (idx === q.correctIndex) {
+          btn.classList.add("correct");
+          statusSymbol = "✓";
+        } else if (idx === answeredRecord.selectedIndex && !answeredRecord.isCorrect) {
+          btn.classList.add("incorrect");
+          statusSymbol = "✕";
+        }
+      } else {
+        // Pergunta ainda não confirmada
+        if (state.selectedOption === idx) {
+          btn.classList.add("selected");
+        }
+        btn.addEventListener("click", () => handleSelectOption(idx));
+      }
+
+      btn.innerHTML = `
+        <span class="option-letter">${OPTION_LETTERS[idx]}</span>
+        <span class="option-text">${optText}</span>
+        <span class="option-status-icon">${statusSymbol}</span>
+      `;
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  // Caixa de feedback e explicação
+  const feedbackBox = document.getElementById("feedback-box");
+  const feedbackTitle = document.getElementById("feedback-title");
+  const feedbackExplanation = document.getElementById("feedback-explanation");
+
+  if (feedbackBox && feedbackTitle && feedbackExplanation) {
+    if (answeredRecord !== null) {
+      feedbackBox.className = `feedback-box visible ${answeredRecord.isCorrect ? "feedback-correct" : "feedback-incorrect"}`;
+      feedbackTitle.textContent = answeredRecord.isCorrect
+        ? "✓ Resposta Correta! Muito bem!"
+        : `✕ Resposta Incorreta. A alternativa correta é a letra ${OPTION_LETTERS[q.correctIndex]}.`;
+      feedbackExplanation.textContent = q.explanation;
+    } else {
+      feedbackBox.className = "feedback-box";
+    }
+  }
+
+  // Atualiza estado dos botões do rodapé (Voltar, Confirmar Resposta, Próxima Pergunta)
+  const btnPrev = document.getElementById("btn-prev-question");
+  const btnConfirm = document.getElementById("btn-confirm-answer");
+  const btnNext = document.getElementById("btn-next-question");
+
+  if (btnPrev) {
+    btnPrev.disabled = state.currentIndex === 0;
+  }
+
+  if (btnConfirm) {
+    if (answeredRecord !== null) {
+      btnConfirm.style.display = "none";
+    } else {
+      btnConfirm.style.display = "inline-flex";
+      btnConfirm.disabled = state.selectedOption === null;
+    }
+  }
+
+  if (btnNext) {
+    const isLast = state.currentIndex === total - 1;
+    btnNext.textContent = isLast ? "VER RESULTADO FINAL →" : "PRÓXIMA PERGUNTA →";
+  }
+}
+
+/**
+ * Seleciona uma alternativa (antes da confirmação)
+ */
+function handleSelectOption(optionIdx) {
+  // Não permite alterar se a pergunta já foi respondida
+  if (state.answers[state.currentIndex] !== null) return;
+
+  state.selectedOption = optionIdx;
+  renderCurrentQuestion();
+}
+
+/**
+ * Confirma a resposta selecionada, exibe o feedback verde/vermelho e bloqueia nova tentativa
+ */
+function confirmCurrentAnswer() {
+  if (state.answers[state.currentIndex] !== null) return;
+
+  if (state.selectedOption === null) {
+    showToast("Selecione uma das 4 alternativas antes de confirmar!", "warning");
+    return;
+  }
+
+  const q = QUIZ_QUESTIONS[state.currentIndex];
+  const isCorrect = state.selectedOption === q.correctIndex;
+
+  state.answers[state.currentIndex] = {
+    selectedIndex: state.selectedOption,
+    isCorrect
+  };
+
+  renderCurrentQuestion();
+}
+
+/**
+ * Avança para a próxima pergunta (ou finaliza o quiz na pergunta 10).
+ * Impede avançar sem selecionar e confirmar uma resposta.
+ */
+function handleNextQuestion() {
+  const answeredRecord = state.answers[state.currentIndex];
+
+  // Se o participante ainda não respondeu esta pergunta
+  if (answeredRecord === null) {
+    if (state.selectedOption === null) {
+      showToast("Atenção: selecione uma alternativa antes de avançar!", "warning");
+      return;
+    }
+    // Se selecionou uma alternativa mas clicou direto em Próxima, confirma primeiro para exibir o feedback educativo
+    confirmCurrentAnswer();
+    showToast("Resposta confirmada! Confira a explicação abaixo e clique novamente para avançar.", "info");
+    return;
+  }
+
+  if (state.currentIndex < QUIZ_QUESTIONS.length - 1) {
+    state.currentIndex += 1;
+    const nextSaved = state.answers[state.currentIndex];
+    state.selectedOption = nextSaved ? nextSaved.selectedIndex : null;
+    renderCurrentQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+/**
+ * Volta para a pergunta anterior preservando as respostas já confirmadas
+ */
+function handlePrevQuestion() {
+  if (state.currentIndex <= 0) return;
+  state.currentIndex -= 1;
+  const prevSaved = state.answers[state.currentIndex];
+  state.selectedOption = prevSaved ? prevSaved.selectedIndex : null;
+  renderCurrentQuestion();
+}
+
+/* ==========================================================================
+   TELA DE RESULTADO E CLASSIFICAÇÃO
+   ========================================================================== */
+
+/**
+ * Retorna a classificação e a mensagem personalizada conforme a pontuação (0 a 10)
+ */
+function getClassification(score) {
+  if (score <= 3) {
+    return {
+      rank: "Continue aprendendo!",
+      message: `${state.playerName}, você está dando os primeiros passos no Trello! Revise as explicações abaixo para dominar o uso de quadros, listas e cartões.`
+    };
+  }
+  if (score <= 6) {
+    return {
+      rank: "Bom começo!",
+      message: `Bom trabalho, ${state.playerName}! Você já conhece a base do Trello e com um pouco mais de prática dominará todas as funcionalidades.`
+    };
+  }
+  if (score <= 8) {
+    return {
+      rank: "Muito bem!",
+      message: `Parabéns, ${state.playerName}! Você demonstrou um ótimo domínio sobre a organização de tarefas, etiquetas, prazos e checklists no Trello!`
+    };
+  }
+  return {
+    rank: "Especialista em Trello!",
+    message: `Excelente desempenho, ${state.playerName}! Você domina os conceitos do Trello e está pronto para organizar qualquer projeto com eficiência!`
+  };
+}
+
+/**
+ * Finaliza o quiz, para o cronômetro, salva o recorde e exibe a Tela de Resultado
+ */
+function finishQuiz() {
+  stopTimer();
+
+  const total = QUIZ_QUESTIONS.length;
+  const correctCount = state.answers.filter((a) => a && a.isCorrect).length;
+  const wrongCount = total - correctCount;
+  const percentage = Math.round((correctCount / total) * 100);
+  const { rank, message } = getClassification(correctCount);
+
+  const isNewRecord = saveBestScoreIfBetter(correctCount, percentage, state.elapsedSeconds, state.playerName);
+
+  // Preenche elementos da Tela de Resultado
+  const rankBadge = document.getElementById("result-rank-badge");
+  const titleEl = document.getElementById("result-title");
+  const msgEl = document.getElementById("result-message");
+  const statScore = document.getElementById("stat-score");
+  const statPct = document.getElementById("stat-percentage");
+  const statCorrect = document.getElementById("stat-correct");
+  const statWrong = document.getElementById("stat-wrong");
+
+  if (rankBadge) rankBadge.textContent = rank;
+  if (titleEl) titleEl.textContent = `Resultado de ${state.playerName}`;
+  if (msgEl) msgEl.textContent = message;
+  if (statScore) statScore.textContent = `${correctCount} de ${total}`;
+  if (statPct) statPct.textContent = `${percentage}%`;
+  if (statCorrect) statCorrect.textContent = String(correctCount);
+  if (statWrong) statWrong.textContent = String(wrongCount);
+
+  // Oculta a seção de revisão inicialmente até o usuário clicar em "REVISAR RESPOSTAS" (ou permite expandir)
+  const reviewSection = document.getElementById("review-section");
+  const btnReview = document.getElementById("btn-review-answers");
+  if (reviewSection) reviewSection.classList.remove("visible");
+  if (btnReview) btnReview.textContent = "REVISAR RESPOSTAS";
+
+  renderReviewList();
+  showScreen("screen-result");
+
+  if (isNewRecord) {
+    showToast("Novo recorde pessoal registrado neste navegador!", "success");
+  }
+}
+
+/**
+ * Gera a lista detalhada das 10 perguntas para a seção de Revisão das Respostas
+ */
+function renderReviewList() {
+  const listEl = document.getElementById("review-list");
+  if (!listEl) return;
+
+  listEl.innerHTML = "";
+
+  QUIZ_QUESTIONS.forEach((q, idx) => {
+    const ans = state.answers[idx];
+    const isOk = ans ? ans.isCorrect : false;
+    const selectedText = ans !== null ? `${OPTION_LETTERS[ans.selectedIndex]}) ${q.options[ans.selectedIndex]}` : "Não respondida";
+    const correctText = `${OPTION_LETTERS[q.correctIndex]}) ${q.options[q.correctIndex]}`;
+
+    const card = document.createElement("div");
+    card.className = `review-card ${isOk ? "review-ok" : "review-err"}`;
+
+    card.innerHTML = `
+      <div class="review-card-top">
+        <span class="review-q-num">Pergunta ${idx + 1} de ${QUIZ_QUESTIONS.length} · ${q.category}</span>
+        <span class="review-badge ${isOk ? "badge-ok" : "badge-err"}">
+          ${isOk ? "✓ Acertou" : "✕ Errou"}
+        </span>
+      </div>
+      <div class="review-question-text">${idx + 1}. ${q.question}</div>
+      <div class="review-answers-comparison">
+        <div class="review-ans-line ${isOk ? "user-ok" : "user-err"}">
+          <strong>Sua resposta:</strong> ${selectedText}
+        </div>
+        ${
+          !isOk
+            ? `<div class="review-ans-line correct-ref">
+                 <strong>Alternativa correta:</strong> ${correctText}
+               </div>`
+            : ""
+        }
+      </div>
+      <div class="review-exp-text">
+        <strong>Explicação:</strong> ${q.explanation}
+      </div>
+    `;
+
+    listEl.appendChild(card);
+  });
+}
+
+/**
+ * Alterna a exibição da seção de revisão das 10 respostas
+ */
+function toggleReviewSection() {
+  const reviewSection = document.getElementById("review-section");
+  const btnReview = document.getElementById("btn-review-answers");
+  if (!reviewSection) return;
+
+  const isVisible = reviewSection.classList.toggle("visible");
+  if (btnReview) {
+    btnReview.textContent = isVisible ? "OCULTAR REVISÃO" : "REVISAR RESPOSTAS";
+  }
+
+  if (isVisible) {
+    reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+/**
+ * Refaz o quiz mantendo o nome do participante atual
+ */
+function retryQuiz() {
+  state.currentIndex = 0;
+  state.selectedOption = null;
+  state.answers = Array(QUIZ_QUESTIONS.length).fill(null);
+  state.elapsedSeconds = 0;
+
+  showScreen("screen-quiz");
+  startTimer();
+  renderCurrentQuestion();
+  showToast("Quiz reiniciado! Boa sorte!", "info");
+}
+
+/**
+ * Volta para a tela inicial do quiz
+ */
+function backToHome() {
+  stopTimer();
+  showScreen("screen-home");
+}
+
+/* ==========================================================================
+   MODAL DE CONFIRMAÇÃO DE REINÍCIO
+   ========================================================================== */
+
+function openRestartModal() {
+  const modal = document.getElementById("restart-modal");
+  if (modal) modal.classList.add("active");
+}
+
+function closeRestartModal() {
+  const modal = document.getElementById("restart-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function confirmRestartFromModal() {
+  closeRestartModal();
+  retryQuiz();
+}
+
+/* ==========================================================================
+   REGISTRO DOS EVENTOS AO CARREGAR O DOM
+   ========================================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderBestScoreBanner();
+
+  const btnStart = document.getElementById("btn-start-quiz");
+  const nameInput = document.getElementById("participant-name");
+  const btnConfirm = document.getElementById("btn-confirm-answer");
+  const btnNext = document.getElementById("btn-next-question");
+  const btnPrev = document.getElementById("btn-prev-question");
+  const btnReview = document.getElementById("btn-review-answers");
+  const btnRetry = document.getElementById("btn-retry-quiz");
+  const btnHome = document.getElementById("btn-back-home");
+  const btnBrandHome = document.getElementById("btn-brand-home");
+  const btnRestartTop = document.getElementById("btn-restart-top");
+  const btnCancelRestart = document.getElementById("btn-cancel-restart");
+  const btnConfirmRestart = document.getElementById("btn-confirm-restart");
+
+  if (btnStart) btnStart.addEventListener("click", startQuiz);
+
+  if (nameInput) {
+    nameInput.addEventListener("input", () => {
+      nameInput.classList.remove("input-error");
+    });
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        startQuiz();
+      }
+    });
+  }
+
+  if (btnConfirm) btnConfirm.addEventListener("click", confirmCurrentAnswer);
+  if (btnNext) btnNext.addEventListener("click", handleNextQuestion);
+  if (btnPrev) btnPrev.addEventListener("click", handlePrevQuestion);
+  if (btnReview) btnReview.addEventListener("click", toggleReviewSection);
+  if (btnRetry) btnRetry.addEventListener("click", retryQuiz);
+  if (btnHome) btnHome.addEventListener("click", backToHome);
+  if (btnBrandHome) btnBrandHome.addEventListener("click", backToHome);
+  if (btnRestartTop) btnRestartTop.addEventListener("click", openRestartModal);
+  if (btnCancelRestart) btnCancelRestart.addEventListener("click", closeRestartModal);
+  if (btnConfirmRestart) btnConfirmRestart.addEventListener("click", confirmRestartFromModal);
+});
+
+</script>
+</body>
+</html>
